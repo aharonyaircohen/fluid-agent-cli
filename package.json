@@ -1,0 +1,27 @@
+{
+  "name": "@digital-fluid/fluid-agent-cli",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/aharonyaircohen/fluid-agent-cli#readme",
+  "bugs": {
+    "url": "https://github.com/aharonyaircohen/fluid-agent-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aharonyaircohen/fluid-agent-cli.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@digital-fluid/fluid-agent": "github:aharonyaircohen/fluid-agent",
+    "@digital-fluid/fluid-agent-spec": "github:aharonyaircohen/fluid-agent-spec",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+}
