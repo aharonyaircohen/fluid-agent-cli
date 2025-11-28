@@ -1,0 +1,69 @@
+# Source files (compiled output in dist/ is included)
+src/
+*.ts
+!*.d.ts
+
+# Tests
+test.ts
+*.test.ts
+*.spec.ts
+**/__tests__/
+dist/**/*.test.*
+dist/**/__tests__/
+dist/test/
+coverage/
+.nyc_output
+
+# Config files
+tsconfig.json
+jest.config.js
+vitest.config.ts
+.eslintrc*
+.prettierrc*
+
+# Development scripts
+pack.sh
+instructions.md
+
+# Examples (users can view on GitHub)
+example/
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.*
+
+# Build artifacts
+*.tsbuildinfo
+
+# Package managers
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

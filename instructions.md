@@ -5,7 +5,7 @@ Its purpose: **build the `fluid-agent-cli` package from scratch**, including:
 
 * CLI interface
 * JSON + YAML task loading
-* Integration with the existing `fluid-agents` runtime
+* Integration with the existing `fluid-agent` runtime
 * Build system
 * Executable binary
 
@@ -23,7 +23,7 @@ Follow all requirements exactly.
 
 The CLI depends on the existing package:
 
-* `@digital-fluid/fluid-agents`
+* `@digital-fluid/fluid-agent`
 
 ---
 
@@ -57,7 +57,7 @@ Runs a task against a codebase.
 
 1. Load & parse task file
 2. Assemble `RuntimeTask`
-3. Instantiate default LLM client from `fluid-agents`
+3. Instantiate default LLM client from `fluid-agent`
 4. Call `runTask()`
 5. Print:
 
@@ -154,7 +154,7 @@ Install:
 
 * commander
 * yaml
-* @digital-fluid/fluid-agents
+* @digital-fluid/fluid-agent
 
 Dev Dependencies:
 
@@ -212,7 +212,7 @@ Perform the following:
 2. Implement **all** files defined above
 3. Implement JSON + YAML task loading
 4. Implement CLI command
-5. Connect to `fluid-agents` runtime
+5. Connect to `fluid-agent` runtime
 6. Add bin entry in `package.json`
 7. Add build scripts
 8. Generate README.md explaining installation and usage

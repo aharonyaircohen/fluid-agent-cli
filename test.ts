@@ -36,7 +36,6 @@ You must conform to the following JSON schema:
   return {
     id: "add-log-to-index",
     objective: `Building fluid-agent-cli node.js package`,
-    contextFolder: process.cwd(),
     systemPrompt:
       "You are a node.js typescript engineer. You have access to the file system and can create, update, and delete files as needed to accomplish your objective.",
     agentInstructions,

@@ -1,0 +1,10 @@
+id: "demo-landing-html"
+objective: >
+  Replace the content of example/index.html with a modern landing page skeleton
+  that includes a hero section, a features section, and a call-to-action button.
+contextFiles:
+  - "example/index.html"
+systemPrompt: >
+  You are a strict code-editing agent.
+agentInstructions: |
+  Edit only the files listed in contextFiles.

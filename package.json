@@ -1,7 +1,16 @@
 {
   "name": "@digital-fluid/fluid-agent-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "CLI interface for the fluid-agent runtime. Execute AI-powered code modification tasks from JSON or YAML task definitions.",
+  "keywords": [
+    "cli",
+    "ai",
+    "code-generation",
+    "automation",
+    "fluid-agent",
+    "yaml",
+    "task-runner"
+  ],
   "homepage": "https://github.com/aharonyaircohen/fluid-agent-cli#readme",
   "bugs": {
     "url": "https://github.com/aharonyaircohen/fluid-agent-cli/issues"
@@ -10,22 +19,41 @@
     "type": "git",
     "url": "git+https://github.com/aharonyaircohen/fluid-agent-cli.git"
   },
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "license": "MIT",
+  "author": "Digital Fluid",
+  "type": "module",
+  "bin": {
+    "fluid-agent": "./dist/cli/index.js"
+  },
+  "main": "./dist/cli/index.js",
+  "types": "./dist/cli/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build",
     "test": "tsx test.ts",
     "update": "npm run fluid-agent-update",
-    "fluid-agent-update": "pnpm update @digital-fluid/fluid-agent"
+    "fluid-agent-update": "pnpm update @digital-fluid/fluid-agent",
+    "example": "node dist/cli/index.js run example/task.yaml --root . --write",
+    "packit": "bash pack.sh"
   },
   "dependencies": {
     "@digital-fluid/fluid-agent": "github:aharonyaircohen/fluid-agent",
-    "@types/node": "^24.10.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "commander": "^14.0.2",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "tsx": "^4.20.6"
+    "@types/jest": "^29.5.3",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
