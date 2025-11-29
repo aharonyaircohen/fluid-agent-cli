@@ -23,7 +23,8 @@
   "author": "Digital Fluid",
   "type": "module",
   "bin": {
-    "fluid-agent": "./dist/cli/index.js"
+    "fluid-agent": "./dist/cli/index.js",
+    "fluid-logs": "./dist/cli/logs.js"
   },
   "main": "./dist/cli/index.js",
   "types": "./dist/cli/index.d.ts",
@@ -39,6 +40,8 @@
     "build": "tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
     "test": "jest",
+    "test:e2e": "npm run build && npx tsx --test tests/logs.e2e.test.ts",
+    "test:e2e:verbose": "npm run build && VERBOSE=true npx tsx --test tests/logs.e2e.test.ts",
     "test:manual": "tsx test.ts",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -49,6 +52,7 @@
   "dependencies": {
     "@digital-fluid/fluid-agent": "file:../fluid-agent",
     "commander": "^14.0.2",
+    "picocolors": "^1.1.1",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
