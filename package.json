@@ -42,13 +42,12 @@
     "test:manual": "tsx test.ts",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "update": "npm run fluid-agent-update",
-    "fluid-agent-update": "pnpm update @digital-fluid/fluid-agent",
+    "updateme": "npm add file:../fluid-agent --force",
     "example": "node dist/cli/index.js run example/task.yaml --root . --write",
-    "packit": "bash pack.sh"
+    "packme": "bash pack.sh"
   },
   "dependencies": {
-    "@digital-fluid/fluid-agent": "../fluid-agent",
+    "@digital-fluid/fluid-agent": "file:../fluid-agent",
     "commander": "^14.0.2",
     "yaml": "^2.8.1"
   },
