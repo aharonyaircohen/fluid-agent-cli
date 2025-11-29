@@ -10,7 +10,9 @@ const program = new Command();
 program
   .name('fluid-agent')
   .description('CLI interface for fluid-agent runtime')
-  .version('1.0.0');
+  .version('1.0.0')
+  .showHelpAfterError()
+  .showSuggestionAfterError();
 
 program
   .command('run')
