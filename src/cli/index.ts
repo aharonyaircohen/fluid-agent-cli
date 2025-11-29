@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { fileURLToPath } from 'url';
 import { runCommand } from './runCommand.js';
 import { CLIOptions } from '../types/cliTypes.js';
 
@@ -30,10 +29,8 @@ export async function main(): Promise<void> {
   await program.parseAsync(process.argv);
 }
 
-// Run if this is the main module (ESM-compatible check)
-if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  main().catch((error) => {
-    console.error('Fatal error:', error);
-    process.exit(1);
-  });
-}
+// execute explicitly
+main().catch((error) => {
+  console.error('Fatal error:', error);
+  process.exit(1);
+});
