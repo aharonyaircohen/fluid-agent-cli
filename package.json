@@ -24,7 +24,8 @@
   "type": "module",
   "bin": {
     "fluid-agent": "./dist/cli/index.js",
-    "fluid-logs": "./dist/cli/logs.js"
+    "fluid-logs": "./dist/cli/logs.js",
+    "flcli": "./dist/cli/index.js"
   },
   "main": "./dist/cli/index.js",
   "types": "./dist/cli/index.d.ts",
@@ -45,7 +46,6 @@
     "test:manual": "tsx test.ts",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "updateme": "npm add file:../fluid-agent --force",
     "example": "node dist/cli/index.js run example/task.yaml --root . --write",
     "packme": "bash pack.sh"
   },

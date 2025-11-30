@@ -1,0 +1,7 @@
+{
+  "name": "Fluid Create PR",
+  "version": "1.0.0",
+  "description": "Open a pull request for the current branch.",
+  "entry": "prompt.md",
+  "input_type": "text"
+}

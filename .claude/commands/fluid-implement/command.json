@@ -1,0 +1,7 @@
+{
+  "name": "Fluid Implement",
+  "version": "1.0.0",
+  "description": "Create and execute a task in one command (combines create-task + execute-task).",
+  "entry": "prompt.md",
+  "input_type": "text"
+}

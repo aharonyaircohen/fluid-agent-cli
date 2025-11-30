@@ -1,0 +1,7 @@
+{
+  "name": "Fluid Commit",
+  "version": "1.0.0",
+  "description": "Create a Git commit with the staged changes.",
+  "entry": "prompt.md",
+  "input_type": "text"
+}

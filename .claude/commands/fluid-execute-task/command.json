@@ -1,0 +1,7 @@
+{
+  "name": "Fluid Run Task",
+  "version": "1.0.0",
+  "description": "Execute FluidSpec tasks.",
+  "entry": "prompt.md",
+  "input_type": "text"
+}

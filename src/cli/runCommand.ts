@@ -44,7 +44,7 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
     
     // Acquire default LLM client and run the task
     const llmClient = agentLLM.getDefaultLLMClient();
-    const result: RunTaskResult = await runTask(llmClient, runtimeTask, { rootDir, dryRun: !writeMode, logger });
+    const result: RunTaskResult = await runTask(llmClient, runtimeTask, { rootDir, logger });
     
     console.log('');
     console.log('=== TASK EXECUTION COMPLETE ===');
@@ -54,7 +54,7 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
     console.log('=== SUMMARY ===');
     // Summarize using the engine-provided summary
     console.log(JSON.stringify({
-      summary: result.summary,
+      summary: result,
       traceCount: result.trace?.length || 0
     }, null, 2));
     console.log('');
