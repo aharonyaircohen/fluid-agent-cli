@@ -50,19 +50,19 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
     console.log('=== TASK EXECUTION COMPLETE ===');
     console.log('');
     
-    // Print summary
-    console.log('=== SUMMARY ===');
-    // Summarize using the engine-provided summary
-    console.log(JSON.stringify({
-      summary: result,
-      traceCount: result.trace?.length || 0
-    }, null, 2));
-    console.log('');
+    // // Print summary
+    // console.log('=== SUMMARY ===');
+    // // Summarize using the engine-provided summary
+    // console.log(JSON.stringify({
+    //   summary: result,
+    //   traceCount: result.trace?.length || 0
+    // }, null, 2));
+    // console.log('');
     
     // Print raw model output if available
-    if (result.rawModelOutput) {
+    if (result.traceSummary) {
       console.log('=== RAW MODEL OUTPUT (last) ===');
-      console.log(result.rawModelOutput);
+      console.log(result.traceSummary);
       console.log('');
     }
     
