@@ -1,6 +1,6 @@
 id: "demo-landing-html"
 objective: >
-  in example/index.html file, change bg color to light blue and add a footer with text "Powered by Fluid Agent".
+  in example/index.html file, change bg color to  blue and remove a footer with text "Powered by Fluid Agent".
 contextFiles:
   - "example/index.html"
 systemPrompt: >

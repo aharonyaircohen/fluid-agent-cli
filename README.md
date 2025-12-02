@@ -30,7 +30,8 @@ fluid-agent run <taskFile> [options]
 **Options:**
 - `-r, --root <path>` - Project root directory (default: current directory)
 - `-w, --write` - Apply changes to files (default: dry-run mode)
-- `-y, --yaml` - Force YAML parsing (helpful if file extension is missing)
+- `-y, --yes` - Apply changes (alias for `--write`)
+- `--yaml` - Force YAML parsing (helpful if file extension is missing)
 - `--no-trace` - Suppress TRACE output during execution
 - `-m, --model <name>` - Override the model specified in task file
 - `-p, --prompt [text]` - Run an ad-hoc prompt instead of a task file (text can be provided after the flag)

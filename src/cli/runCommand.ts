@@ -8,6 +8,7 @@ export async function runCommand(taskOrPrompt: string | undefined, options: CLIO
   try {
     const npmPromptFlag = readNpmConfigFlag('prompt') ?? readNpmConfigFlag('p');
     const npmChatFlag = readNpmConfigFlag('chat');
+    const npmYesFlag = readNpmConfigFlag('yes') ?? readNpmConfigFlag('y');
 
     // If npm swallowed flags, rehydrate chat flag from npm config
     if (!options.chat && npmChatFlag) {
@@ -16,6 +17,9 @@ export async function runCommand(taskOrPrompt: string | undefined, options: CLIO
     if (options.prompt === undefined && npmPromptFlag) {
       // treat as prompt flag without text; text may come from positional
       options.prompt = true;
+    }
+    if (!options.yes && npmYesFlag) {
+      options.yes = true;
     }
 
     const promptValue = typeof options.prompt === 'string' ? options.prompt : undefined;
@@ -71,7 +75,7 @@ export async function runCommand(taskOrPrompt: string | undefined, options: CLIO
     
     // Set up runtime options
     const rootDir = options.root ? path.resolve(options.root) : process.cwd();
-    const writeMode = Boolean(options.write);
+    const writeMode = Boolean(options.write || options.yes);
     const showTrace = options.trace !== false; // default true unless --no-trace
     
     console.log(`Root directory: ${rootDir}`);

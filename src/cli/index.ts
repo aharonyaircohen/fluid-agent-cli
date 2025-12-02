@@ -51,7 +51,8 @@ const run = new Command('run')
   .argument('[taskOrPrompt]', 'Path to task file (JSON or YAML) or prompt text when using --prompt')
   .option('-r, --root <path>', 'Project root directory', process.cwd())
   .option('-w, --write', 'Apply changes (default: dry-run mode)', false)
-  .option('-y, --yaml', 'Force YAML parser for task file', false)
+  .option('-y, --yes', 'Apply changes (alias for --write)', false)
+  .option('--yaml', 'Force YAML parser for task file', false)
   .option('--no-trace', 'Suppress TRACE output')
   .option('-m, --model <name>', 'Override model')
   .option('-p, --prompt [text]', 'Run an ad-hoc prompt instead of a task file')
@@ -69,13 +70,14 @@ program.addHelpText(
 Examples:
   fluid-agent run task.yaml --write
   fluid-agent -p "Summarize the codebase" --chat
-  fluid-agent run -y task.without.yaml.ext --write
+  fluid-agent run --yaml task.without.yaml.ext --write
   fluid-agent logs list --task my-task --status completed --json
 
 Run options:
   -r, --root <path>     Project root directory (default: cwd)
   -w, --write           Apply changes (default: dry-run)
-  -y, --yaml            Force YAML parser for task file
+  -y, --yes             Apply changes (alias for --write)
+  --yaml                Force YAML parser for task file
   --no-trace            Suppress TRACE output
   -m, --model <name>    Override model
   -p, --prompt [text]   Run an ad-hoc prompt instead of a task file

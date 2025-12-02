@@ -6,6 +6,7 @@ export interface CLIOptions {
   prompt?: string | boolean;
   chat?: boolean;
   yaml?: boolean;
+  yes?: boolean;
 }
 
 export interface TaskFile {
