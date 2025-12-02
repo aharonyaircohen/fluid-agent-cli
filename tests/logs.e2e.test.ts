@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Path to the compiled CLI binary
-const CLI_PATH = path.join(__dirname, "../../../dist/cli/logs.js");
+const CLI_PATH = path.join(__dirname, "../dist/cli/logs.js");
 const TEST_TASK_ID = "e2e-test-task";
 
 // Helper to execute CLI commands
@@ -194,6 +194,19 @@ describe("fluid-logs CLI E2E", () => {
       assert.ok(!output.includes(testData.completedRunId.substring(0, 8)));
       assert.ok(output.includes(testData.failedRunId.substring(0, 8)));
     });
+
+    test("filters by run stage", () => {
+      const runs = runCLIJSON(`list --task ${TEST_TASK_ID} --stage execution --json`);
+      assert.ok(Array.isArray(runs));
+      assert.ok(runs.every((run: any) => run.runStage === "execution"));
+    });
+
+    test("filters by origin and limit", () => {
+      const runs = runCLIJSON(`list --task ${TEST_TASK_ID} --origin api --limit 2 --json`);
+      assert.ok(Array.isArray(runs));
+      assert.strictEqual(runs.length, 2);
+      assert.ok(runs.every((run: any) => run.taskOrigin === "api"));
+    });
   });
 
   describe("show command", () => {
@@ -245,6 +258,24 @@ describe("fluid-logs CLI E2E", () => {
       assert.strictEqual(run.taskId, TEST_TASK_ID);
       assert.ok(run.runType);
       assert.ok(run.status);
+    });
+  });
+
+  describe("get command", () => {
+    test("returns run metadata only when artifacts are not requested", () => {
+      const run = runCLIJSON(`get --run ${testData.failedRunId}`);
+      assert.strictEqual(run.id, testData.failedRunId);
+      assert.strictEqual(run.taskId, TEST_TASK_ID);
+      assert.ok(!("artifacts" in run));
+    });
+
+    test("returns run with artifacts when requested", () => {
+      const result = runCLIJSON(`get --run ${testData.completedRunId} --artifacts`);
+      assert.ok(result.run);
+      assert.strictEqual(result.run.id, testData.completedRunId);
+      assert.ok(result.artifacts);
+      assert.ok(result.artifacts.spec);
+      assert.ok(result.artifacts.execution);
     });
   });
 

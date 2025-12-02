@@ -3,6 +3,9 @@ export interface CLIOptions {
   write?: boolean;
   trace?: boolean;
   model?: string;
+  prompt?: string | boolean;
+  chat?: boolean;
+  yaml?: boolean;
 }
 
 export interface TaskFile {

@@ -25,13 +25,16 @@ fluid-agent run <taskFile> [options]
 ```
 
 **Arguments:**
-- `<taskFile>` - Path to task file (JSON or YAML format)
+- `<taskFile>` - Path to task file (JSON or YAML format). Optional when using `--prompt`.
 
 **Options:**
 - `-r, --root <path>` - Project root directory (default: current directory)
 - `-w, --write` - Apply changes to files (default: dry-run mode)
+- `-y, --yaml` - Force YAML parsing (helpful if file extension is missing)
 - `--no-trace` - Suppress TRACE output during execution
 - `-m, --model <name>` - Override the model specified in task file
+- `-p, --prompt [text]` - Run an ad-hoc prompt instead of a task file (text can be provided after the flag)
+- `--chat` - Chat-only mode for `--prompt` (no edits, conversational)
 
 ### Examples
 
@@ -50,6 +53,15 @@ fluid-agent run my-task.json --no-trace
 
 # Override model
 fluid-agent run my-task.json --model gpt-4
+
+# Run an ad-hoc prompt (execution mode)
+fluid-agent run --prompt "Add logging to user service" --write
+
+# Run an ad-hoc chat (no edits)
+fluid-agent run --prompt "Summarize the codebase" --chat
+
+# When using npm scripts, pass a double-dash so npm doesn't eat flags
+npm start -- -p "Summarize" --chat
 ```
 
 ## Task File Format
@@ -166,6 +178,16 @@ npm run build
 ```bash
 npm run dev -- run example.json
 ```
+
+### Logs Inspection
+
+`fluid-logs` exposes the runtime logs stored by `@digital-fluid/fluid-agent`:
+
+- List/query runs: `fluid-logs list [--task <id>] [--type ... --status ... --origin ... --stage ... --after ... --before ... --limit ... --json]`
+- Latest run: `fluid-logs latest [--task <id>] [--type ... --status ... --origin ... --stage ... --after ... --before ... --json]`
+- Show details: `fluid-logs show --run <runId> [--events] [--events-limit <n>] [--json]`
+- Fetch run with artifacts: `fluid-logs get --run <runId> --artifacts [--log-events --log-level warn,error --no-spec --no-execution ...]`
+- Log events: `fluid-logs events --run <runId> [--level warn,error --source runtime,file-engine --since <iso> --limit <n> --json]`
 
 ## License
 

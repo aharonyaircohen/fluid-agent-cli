@@ -98,6 +98,8 @@ export function formatRunsTable(runs: TaskLogEntry[]): void {
   const tableData = runs.map((r) => ({
     id: truncateHash(r.id, 8),
     runType: r.runType,
+    origin: r.taskOrigin ?? "-",
+    stage: r.runStage ?? "-",
     status: colorizeStatus(r.status),
     attempt: r.attemptNumber,
     created: formatTimestamp(r.createdAt),
@@ -120,6 +122,15 @@ export function formatRunDetails(run: TaskLogEntry): void {
   console.log(`${pc.bold("ID:")}              ${run.id}`);
   console.log(`${pc.bold("Task ID:")}         ${run.taskId}`);
   console.log(`${pc.bold("Run Type:")}        ${run.runType}`);
+  if (run.taskOrigin) {
+    console.log(`${pc.bold("Origin:")}          ${run.taskOrigin}`);
+  }
+  if (run.runStage) {
+    console.log(`${pc.bold("Stage:")}           ${run.runStage}`);
+  }
+  if (run.primaryTarget) {
+    console.log(`${pc.bold("Target:")}          ${run.primaryTarget}`);
+  }
   console.log(`${pc.bold("Status:")}          ${colorizeStatus(run.status)}`);
   console.log(`${pc.bold("Attempt:")}         ${run.attemptNumber}`);
   console.log(`${pc.bold("Agent Version:")}   ${run.agentVersion}`);

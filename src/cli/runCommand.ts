@@ -1,18 +1,77 @@
 import * as path from 'path';
-import { runTask, RuntimeTask, RunTaskResult, llm as agentLLM } from '@digital-fluid/fluid-agent';
+import { runTask, RuntimeTask, RunTaskResult, llm as agentLLM, buildPromptTask } from '@digital-fluid/fluid-agent';
 import { applyAgentResult } from '../fileEngine/index.js';
 import { loadTask } from '../loaders/loadTask.js';
 import { CLIOptions } from '../types/cliTypes.js';
 
-export async function runCommand(taskFile: string, options: CLIOptions): Promise<void> {
+export async function runCommand(taskOrPrompt: string | undefined, options: CLIOptions): Promise<void> {
   try {
-    // Load and parse task file
-    console.log(`Loading task from: ${taskFile}`);
-    const { task } = await loadTask(taskFile);
+    const npmPromptFlag = readNpmConfigFlag('prompt') ?? readNpmConfigFlag('p');
+    const npmChatFlag = readNpmConfigFlag('chat');
+
+    // If npm swallowed flags, rehydrate chat flag from npm config
+    if (!options.chat && npmChatFlag) {
+      options.chat = true;
+    }
+    if (options.prompt === undefined && npmPromptFlag) {
+      // treat as prompt flag without text; text may come from positional
+      options.prompt = true;
+    }
+
+    const promptValue = typeof options.prompt === 'string' ? options.prompt : undefined;
+    const promptFlagOnly = options.prompt === true;
+
+    let effectivePrompt = promptValue;
+    let taskFile = taskOrPrompt;
+
+    if (promptFlagOnly) {
+      if (taskFile) {
+        effectivePrompt = taskFile;
+        taskFile = undefined;
+      } else {
+        throw new Error("Provide prompt text after -p/--prompt or as the first argument");
+      }
+    }
+
+    if (!effectivePrompt && !taskFile) {
+      throw new Error("You must provide a task file or --prompt");
+    }
+    if (effectivePrompt && taskFile) {
+      throw new Error("Provide either a task file or --prompt, not both");
+    }
+
+    let task: RuntimeTask;
+
+    if (effectivePrompt) {
+      task = buildPromptTask(effectivePrompt, options.chat ? 'chat' : 'execution');
+      console.log(`Running prompt in ${options.chat ? 'chat' : 'execution'} mode`);
+    } else if (taskFile) {
+      try {
+        console.log(`Loading task from: ${taskFile}`);
+        const loaded = await loadTask(taskFile, { forceYaml: options.yaml });
+        task = loaded.task;
+      } catch (error) {
+        const isNotFound = error instanceof Error && error.message.includes('Task file not found');
+
+        if (isNotFound && (npmPromptFlag || npmChatFlag)) {
+          // npm ate the flags, so treat the positional as prompt
+          console.log(`Task file not found. Interpreting input as prompt: "${taskFile}" (npm captured flags)`);
+          task = buildPromptTask(taskFile, options.chat ? 'chat' : 'execution');
+        } else if (isNotFound) {
+          const guidance =
+            "Task file not found. If you intended to send a prompt, rerun with -p/--prompt (npm users: use `npm start -- -p \"...\"`).";
+          throw new Error(guidance);
+        } else {
+          throw error;
+        }
+      }
+    } else {
+      throw new Error("Unable to resolve task input");
+    }
     
     // Set up runtime options
     const rootDir = options.root ? path.resolve(options.root) : process.cwd();
-    const writeMode = options.write || false;
+    const writeMode = Boolean(options.write);
     const showTrace = options.trace !== false; // default true unless --no-trace
     
     console.log(`Root directory: ${rootDir}`);
@@ -29,7 +88,8 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
       maxTokens: task.maxTokens,
       temperature: task.temperature,
       systemPrompt: task.systemPrompt,
-      agentInstructions: task.agentInstructions
+      agentInstructions: task.agentInstructions,
+      taskType: task.taskType,
     };
     
     // Prepare logger to capture runtime messages (the runtime returns structured trace in result)
@@ -46,6 +106,16 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
     // Acquire default LLM client and run the task
     const llmClient = agentLLM.getDefaultLLMClient();
     const result: RunTaskResult = await runTask(llmClient, runtimeTask, { rootDir, logger });
+
+    const isChatMode = runtimeTask.taskType === 'chat' || (result as any).mode === 'chat';
+
+    if (isChatMode) {
+      const preview = (result as any)?.traceSummary?.chatResponsePreview ?? (result as any)?.traceSummary;
+      if (preview) {
+        console.log(typeof preview === 'string' ? preview : JSON.stringify(preview, null, 2));
+      }
+      return;
+    }
 
     // Apply file changes when the task produced execution output
     if (result.mode === 'execution') {
@@ -122,6 +192,16 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
     }
     process.exit(1);
   }
+}
+
+function readNpmConfigFlag(name: string): boolean | undefined {
+  const value = process.env[`npm_config_${name}`];
+  if (value === undefined) return undefined;
+  if (value === '') return true;
+  const normalized = value.toLowerCase();
+  if (['true', '1', 'yes', 'on'].includes(normalized)) return true;
+  if (['false', '0', 'no', 'off'].includes(normalized)) return false;
+  return true;
 }
 
 /**

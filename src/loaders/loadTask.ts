@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as YAML from 'yaml';
 import { TaskFile, LoadedTask } from '../types/cliTypes.js';
 
-export async function loadTask(taskFilePath: string): Promise<LoadedTask> {
+export async function loadTask(taskFilePath: string, options: { forceYaml?: boolean } = {}): Promise<LoadedTask> {
   const absolutePath = path.resolve(taskFilePath);
   
   if (!fs.existsSync(absolutePath)) {
@@ -16,9 +16,9 @@ export async function loadTask(taskFilePath: string): Promise<LoadedTask> {
   let taskData: any;
   
   try {
-    if (extension === '.json') {
+    if (!options.forceYaml && extension === '.json') {
       taskData = JSON.parse(fileContent);
-    } else if (extension === '.yaml' || extension === '.yml') {
+    } else if (options.forceYaml || extension === '.yaml' || extension === '.yml') {
       taskData = YAML.parse(fileContent);
     } else {
       throw new Error(`Unsupported file format: ${extension}. Supported formats: .json, .yaml, .yml`);
