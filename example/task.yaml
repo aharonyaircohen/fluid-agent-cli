@@ -1,7 +1,6 @@
 id: "demo-landing-html"
 objective: >
-  Replace the content of example/index.html with a modern landing page skeleton
-  that includes a hero section, a features section, and a call-to-action button.
+  in example/index.html file, change button to be blue, and hover will be gold
 contextFiles:
   - "example/index.html"
 systemPrompt: >

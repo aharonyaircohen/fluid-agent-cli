@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { runTask, RuntimeTask, RunTaskResult, llm as agentLLM } from '@digital-fluid/fluid-agent';
+import { applyAgentResult } from '../fileEngine/index.js';
 import { loadTask } from '../loaders/loadTask.js';
 import { CLIOptions } from '../types/cliTypes.js';
 
@@ -45,6 +46,33 @@ export async function runCommand(taskFile: string, options: CLIOptions): Promise
     // Acquire default LLM client and run the task
     const llmClient = agentLLM.getDefaultLLMClient();
     const result: RunTaskResult = await runTask(llmClient, runtimeTask, { rootDir, logger });
+
+    // Apply file changes when the task produced execution output
+    if (result.mode === 'execution') {
+      console.log('=== APPLYING FILE CHANGES ===');
+
+      const applySummary = await applyAgentResult(result.result, {
+        rootDir,
+        dryRun: !writeMode,
+        logger,
+      });
+
+      const { counts, dryRun, operations } = applySummary;
+      const modeLabel = dryRun ? 'DRY-RUN (no files written)' : 'WRITE MODE (changes applied)';
+
+      console.log(`Mode: ${modeLabel}`);
+      console.log(
+        `File operations — created: ${counts.created}, updated: ${counts.updated}, deleted: ${counts.deleted}, skipped: ${counts.skipped}`
+      );
+
+      if (operations.length === 0) {
+        console.log('No file operations returned by the agent.');
+      } else if (dryRun) {
+        console.log('Re-run with --write to apply these changes.');
+      }
+
+      console.log('');
+    }
     
     console.log('');
     console.log('=== TASK EXECUTION COMPLETE ===');
